@@ -2,11 +2,17 @@ document.addEventListener('DOMContentLoaded', function() {
   var summarizeButton = document.getElementById('summarize');
   summarizeButton.addEventListener('click', function() {
     chrome.tabs.getSelected(null, function(tab) {
-      d = document;
+      fetch('http://localhost:3000?url='+tab.url).then(r => r.text()).then(result => {
+        // Result now contains the response text, do what you want...
+        console.log(result)
+        
+        d = document;
 
-      var f = d.createElement('div');
-      f.innerHTML = tab.url
-      d.body.appendChild(f);
-    });
+        var f = d.createElement('div');
+        f.innerHTML = result
+        d.body.appendChild(f);
+      });
+    })
+
   }, false);
 }, false);
