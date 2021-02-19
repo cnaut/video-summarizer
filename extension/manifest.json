@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "Lectureless",
+  "description": "Summarize YouTube videos",
+  "version": "1.0",
+
+  "browser_action": {
+   "default_popup": "popup.html"
+  },
+  "permissions": [
+   "activeTab",
+   "tabs"
+   ]
+}
