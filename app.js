@@ -1,16 +1,44 @@
-// Imports the Google Cloud client library for Beta API
 /**
  * TODO(developer): Update client library import to use new
  * version of API when desired features become available
  */
 const speech = require('@google-cloud/speech').v1p1beta1;
 const fs = require('fs');
-const OpenAI = require('openai-api')
+const OpenAI = require('openai-api');
+const unirest = require("unirest");
+
+const req = unirest("GET", "https://subtitles-for-youtube.p.rapidapi.com/subtitles/_jd57YSbD8U");
+
+req.headers({
+	"x-rapidapi-key": process.env.RAPID_API_KEY,
+	"x-rapidapi-host": "subtitles-for-youtube.p.rapidapi.com",
+	"useQueryString": true
+});
+
+
+req.end(function (res) {
+	if (res.error) throw new Error(res.error);
+
+  const captions = res.body;
+  let text = res.body
+  .map(result => result.text)
+  .join(' ');
+	console.log(text);
+
+  const openai = new OpenAI(process.env.OPEN_AI_API_KEY);
+  const prompt = text + "\ntl;dr:";
+
+  openai.complete({
+    engine: 'davinci',
+    prompt: prompt
+  }).then(function(gptResponse) {
+    console.log(gptResponse.data);
+  });        
+  
+});
 
 // Creates a client
 const client = new speech.SpeechClient();
-
-const openai = new OpenAI(process.env.OPEN_AI_API_KEY);
 
 /**
  * TODO(developer): Uncomment the following lines before running the sample.
@@ -46,6 +74,8 @@ const request = {
 };
 
 // Detects speech in the audio file
+/**
+ * 
 client.recognize(request).then(function(response) {
   console.log(response.results)
 
@@ -53,14 +83,9 @@ client.recognize(request).then(function(response) {
   .map(result => result.alternatives[0].transcript)
   .join('\n');
   console.log('Transcription: ', transcription);
-  const prompt = transcription + "\ntl;dr:";
   console.log('Prompt: ', prompt);
-  openai.complete({
-    engine: 'davinci',
-    prompt: prompt
-  }).then(function(gptResponse) {
-    console.log(gptResponse.data);
-  });        
+
 }).catch(function(err) {
   console.log(err)
 });
+ */
