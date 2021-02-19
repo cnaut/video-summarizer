@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@google-cloud/speech": "^4.2.0"
+    "@google-cloud/speech": "^4.2.0",
+    "openai-api": "^1.0.15"
   }
 }
