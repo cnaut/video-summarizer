@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const OpenAI = require('openai-api');
 const unirest = require("unirest");
-const port = 3000
+const port = process.env.PORT || 3000;
 
 
 function parseYoutubeId(url){
