@@ -3,9 +3,49 @@
   <head>
     <title>Lectureless</title>
     <script src="popup.js"></script>
+    <link rel="stylesheet" href="/popup.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
   </head>
   <body>
-    <h1>Lectureless</h1>
-    <button id="summarize">Summarize video</button>
+    <div class="container">
+      <h2 class="mt-2">Lectureless</h2>
+      <div id="setup-div">
+        <div class="row mb-3 gy-2">
+          <div class="col">
+            <input id="first" type="text" placeholder="first name"/>
+          </div>
+          <div class="col">
+            <input id="last" type="text" placeholder="last name"/>
+          </div>
+          <div class="col">
+            <input id="email" type="email" placeholder="email"/>
+          </div>
+        </div>
+        <div class="row mb-2 justify-content-center">
+          <div class="col-auto">
+            <button id="save-email" class="btn btn-success">Save</button>
+          </div>
+        </div>
+      </div>
+  
+      <div id="summarize-div" style="display: none">
+        <div class="row mb-3 gy-2">
+          <div class="col">
+            <input id="video" type="text" placeholder="video name"/>
+          </div>
+        </div>
+  
+        <div class="row mb-2 justify-content-center">
+          <div class="col-auto">
+            <button id="summarize" class="btn btn-success">Summarize video</button>
+          </div>
+        </div>
+      </div>
+  
+      <div id="done-div" style="display: none">
+        <h3>Summarizing!</h3>
+      </div>
+    </div>
+
   </body>
 </html>
