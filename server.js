@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 app.get('/txt-convert', (req, res) => {
   let body = [];
 
-  const request = https.get("https://zapier-dev-files.s3.amazonaws.com/cli-platform/18679/zj0U1cKeUPWmgLePAhlSS0IswLr13vtecnBL07Ojv6uEmXWkigMsCq5E0Hdbx56n4JCmaRAF3m3Anfpbogk0EqyTjtTcBzR0ZIHEiknv0wAkvQXmE2N6PYjjKTfF4j7znSf0BqAItm7kwL0difKQdYMQ0g1xgnn6j9Nx63wyWT0", (txtRes) => {
+  const request = https.get(req.query.url, (txtRes) => {
     txtRes.on('data', chunk => body.push(chunk));
     txtRes.on('end', ()=> {
       res.send(Buffer.concat(body).toString());
