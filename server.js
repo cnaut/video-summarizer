@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const OpenAI = require('openai-api');
 const unirest = require("unirest");
+const https = require('https')
 const port = process.env.PORT || 3000;
 
 
@@ -22,7 +23,8 @@ app.get('/', (req, res) => {
   subtitleReq.headers({
     "x-rapidapi-key": process.env.RAPID_API_KEY,
     "x-rapidapi-host": "subtitles-for-youtube.p.rapidapi.com",
-    "useQueryString": true
+    "useQueryString": true,
+    "lang": "en"
   });
 
   subtitleReq.end(function (subtitleRes) {
@@ -35,23 +37,36 @@ app.get('/', (req, res) => {
     .join(' ');
     console.log(text);
 
-    text = text.substring(0, 8000);
+    text = text.substring(0, 6500)
     console.log(text)
 
     const openai = new OpenAI(process.env.OPEN_AI_API_KEY);
-    const prompt = text + "\ntl;dr:";
+    const prompt = text + " tl;dr:";
 
     openai.complete({
       engine: 'davinci',
-      prompt: prompt
+      prompt: prompt,
+      maxTokens: 100
     }).then(function(gptResponse) {
       console.log(gptResponse.data);
-      res.send(gptResponse.data.choices[0].text)
+      res.send(gptResponse.data.choices[0].text.trim())
     }).catch(function(err) {
       console.log(err)
     });        
     
   });
+})
+
+app.get('/txt-convert', (req, res) => {
+  let body = [];
+
+  const request = https.get("https://zapier-dev-files.s3.amazonaws.com/cli-platform/18679/zj0U1cKeUPWmgLePAhlSS0IswLr13vtecnBL07Ojv6uEmXWkigMsCq5E0Hdbx56n4JCmaRAF3m3Anfpbogk0EqyTjtTcBzR0ZIHEiknv0wAkvQXmE2N6PYjjKTfF4j7znSf0BqAItm7kwL0difKQdYMQ0g1xgnn6j9Nx63wyWT0", (txtRes) => {
+    txtRes.on('data', chunk => body.push(chunk));
+    txtRes.on('end', ()=> {
+      res.send(Buffer.concat(body).toString());
+    });
+  });
+  
 })
 
 app.listen(port, () => {
